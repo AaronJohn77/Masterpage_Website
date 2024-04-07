@@ -8,8 +8,8 @@ const TicketSchema = new mongoose.Schema({
 
 });
 
-const UserModel = mongoose.model('feedback', TicketSchema);
+const TicketModel = mongoose.model('feedback', TicketSchema);
 
-module.exports = UserModel;
+module.exports = TicketModel;
 
 

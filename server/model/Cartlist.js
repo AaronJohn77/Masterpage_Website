@@ -9,6 +9,6 @@ const CartSchema = new mongoose.Schema({
     total_price: Float
 });
 
-const UserModel = mongoose.model('cart_list', CartSchema);
+const CartModel = mongoose.model('cart_list', CartSchema);
 
-module.exports = UserModel;
+module.exports = CartModel;

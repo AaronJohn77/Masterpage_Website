@@ -7,6 +7,6 @@ const ContactSchema = new mongoose.Schema({
     Address: String
 });
 
-const UserModel = mongoose.model('customer_contact_list', ContactSchema);
+const ContactModel = mongoose.model('customer_contact_list', ContactSchema);
 
-module.exports = UserModel;
+module.exports = ContactModel;
