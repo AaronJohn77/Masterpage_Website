@@ -16,33 +16,39 @@ function CartPage() {
   return (
 
 
-    <>
-   
-    <div>CartPage</div>
-    <table>
-
-        <tr>
-            <th>Prodcut Name</th>
-            <th>Product Price</th>
-            <th>Product Quantity</th>
-        </tr>
-        <tr>
-            <td>Product 1</td>
-            <td>15</td>
-            <td>1</td>
-        </tr>
-
-
-
-
-
-
-    </table>
-    
-    
-    
-    
-    </>
+          <>
+          <div className="container mt-4">
+              <h2>Cart Page</h2>
+              <table className="table">
+                  <thead>
+                      <tr>
+                          <th>Product Name</th>
+                          <th>Product Price</th>
+                          <th>Product Quantity</th>
+                          <th>Subtotal</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td>Product 1</td>
+                          <td>$15</td>
+                          <td>1</td>
+                          <td>$15</td>
+                      </tr>
+                      {/* You can dynamically render rows for each product in your cart */}
+                  </tbody>
+                  <tfoot>
+                      <tr>
+                          <td colSpan="3">Total:</td>
+                          <td>$15</td> {/* Total value calculated dynamically */}
+                      </tr>
+                  </tfoot>
+              </table>
+              <div className="text-end">
+                  <Link to="/checkout" className="btn btn-primary">Proceed to Checkout</Link>
+              </div>
+          </div>
+        </>
   )
 }
 

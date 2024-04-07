@@ -7,6 +7,6 @@ password: String,
 role: String,
 });
 
-const UserModel = mongoose.model('users', UserSchema);
+const UserModel = mongoose.model('user_login2', UserSchema);
 
 module.exports = UserModel;
