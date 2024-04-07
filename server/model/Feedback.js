@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const UserSchema = new mongoose.Schema({
+const TicketSchema = new mongoose.Schema({
     ticket_id: double,
     ticket_type: string,
     ticket_date: datetime,
@@ -8,8 +8,8 @@ const UserSchema = new mongoose.Schema({
 
 });
 
-const UserModel = mongoose.model('feedback', UserSchema);
+const TicketModel = mongoose.model('feedback', TicketSchema);
 
-module.exports = UserModel;
+module.exports = TicketModel;
 
 

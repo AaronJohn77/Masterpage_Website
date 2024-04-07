@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const UserSchema = new mongoose.Schema({
+const CartSchema = new mongoose.Schema({
     id_order: string,
     id_product: string,
     date: datetime,
@@ -9,6 +9,6 @@ const UserSchema = new mongoose.Schema({
     total_price: Float
 });
 
-const UserModel = mongoose.model('cart_list', UserSchema);
+const CartModel = mongoose.model('cart_list', CartSchema);
 
-module.exports = UserModel;
+module.exports = CartModel;

@@ -21,7 +21,7 @@ function LoginPage() {
             // Show a success message if login is successful
             alert('Login successful!');
             // Optionally, you can navigate the user to the dashboard or home page
-            navigate('/UpdateUserPage');
+            navigate('/product_page');
         } catch (error) {
             // Handle error if login fails
             setError('Invalid email or password. Please try again.');
