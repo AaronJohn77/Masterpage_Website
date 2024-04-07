@@ -25,7 +25,7 @@ function SignUpPage() {
                 alert('Sign up successful! You can now login.');
                 // Optionally, you can navigate the user to the login page
 
-                navigate("/update")
+                navigate("/login")
             })
             .catch(error => {
                 console.log(error)
