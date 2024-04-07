@@ -8,6 +8,7 @@ function ProductPage() {
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(''); // State to store the selected category
     const [searchTerm, setSearchTerm] = useState(''); // State to store the search term
+    const [sortBy, setSortBy] = useState(''); // State to store the selected sorting option
 
     useEffect(() => {
         axios.get('https://fakestoreapi.com/products')
@@ -50,8 +51,20 @@ function ProductPage() {
         setSearchTerm(event.target.value);
     };
 
-    // Filter products based on selected category and search term
-    const filteredProducts = products.filter(product => {
+    const handleSortByChange = (event) => {
+        setSortBy(event.target.value);
+    };
+
+    // Filter and sort products based on selected category, search term, and sorting option
+    let sortedProducts = [...products];
+
+    if (sortBy === 'priceLowToHigh') {
+        sortedProducts.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'priceHighToLow') {
+        sortedProducts.sort((a, b) => b.price - a.price);
+    }
+
+    const filteredProducts = sortedProducts.filter(product => {
         return (
             (!selectedCategory || product.category === selectedCategory) &&
             (!searchTerm || product.title.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -72,14 +85,22 @@ function ProductPage() {
             </div>
             <div className="search-box">
                 <label className="search-label" htmlFor="search-input">Search by Name: </label>
-                <input 
-                    className="form-control search-input" 
-                    type="text" 
-                    id="search-input" 
-                    value={searchTerm} 
-                    onChange={handleSearchTermChange} 
-                    placeholder="Enter product name" 
+                <input
+                    className="form-control search-input"
+                    type="text"
+                    id="search-input"
+                    value={searchTerm}
+                    onChange={handleSearchTermChange}
+                    placeholder="Enter product name"
                 />
+            </div>
+            <div className="sort-by">
+                <label className="sort-by-label" htmlFor="sort-by-select">Sort by Price: </label>
+                <select className="sort-by-select" id="sort-by-select" value={sortBy} onChange={handleSortByChange}>
+                    <option value="">Select</option>
+                    <option value="priceLowToHigh">Price: Low to High</option>
+                    <option value="priceHighToLow">Price: High to Low</option>
+                </select>
             </div>
             <div className="row row-cols-1 row-cols-md-3">
                 {filteredProducts.map(product => (
@@ -95,12 +116,12 @@ function ProductPage() {
                             </div>
                             <div className="card-footer d-flex justify-content-between align-items-center">
                                 <div className="input-group quantity-input">
-                                    <input 
-                                        type="number" 
-                                        className="form-control" 
-                                        placeholder="Quantity" 
-                                        value={quantities[product.id]} 
-                                        onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value))} 
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        placeholder="Quantity"
+                                        value={quantities[product.id]}
+                                        onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value))}
                                     />
                                 </div>
                                 <button className="btn btn-primary add-to-cart-btn" onClick={() => addToCart(product.id)}>Add to Cart</button>
