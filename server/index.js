@@ -27,17 +27,15 @@ app.post("/login", async (req, res) => {
     try {
       // Find user by email
       const user = await UserModel.findOne({ email });
-  
+
+      console.log(user);
       // If user doesn't exist, return error
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: "User not found here" });
       }
   
-      // Compare passwords
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-  
-      // If password is invalid, return error
-      if (!isPasswordValid) {
+      // Compare passwords (without bcrypt)
+      if (password !== user.password) {
         return res.status(401).json({ message: "Invalid password" });
       }
   
