@@ -5,14 +5,21 @@ import './Product_page.css'; // Import the CSS file
 function ProductPage() {
     const [products, setProducts] = useState([]);
     const [quantities, setQuantities] = useState({});
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(''); // State to store the selected category
+    const [searchTerm, setSearchTerm] = useState(''); // State to store the search term
 
     useEffect(() => {
         axios.get('https://fakestoreapi.com/products')
             .then(response => {
-                setProducts(response.data);
+                const data = response.data;
+                setProducts(data);
+                // Extract categories from products
+                const uniqueCategories = [...new Set(data.map(product => product.category))];
+                setCategories(uniqueCategories);
                 // Initialize quantities state with default values
                 const initialQuantities = {};
-                response.data.forEach(product => {
+                data.forEach(product => {
                     initialQuantities[product.id] = 0;
                 });
                 setQuantities(initialQuantities);
@@ -35,11 +42,47 @@ function ProductPage() {
         // Add your logic to add the product to the cart
     };
 
+    const handleCategoryChange = (event) => {
+        setSelectedCategory(event.target.value);
+    };
+
+    const handleSearchTermChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    // Filter products based on selected category and search term
+    const filteredProducts = products.filter(product => {
+        return (
+            (!selectedCategory || product.category === selectedCategory) &&
+            (!searchTerm || product.title.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+    });
+
     return (
         <div className="container product-container">
             <h1>Product Page</h1>
+            <div className="category-filter">
+                <label className="category-label" htmlFor="category-select">Filter by Category: </label>
+                <select className="category-select" id="category-select" value={selectedCategory} onChange={handleCategoryChange}>
+                    <option value="">All</option>
+                    {categories.map(category => (
+                        <option key={category} value={category}>{category}</option>
+                    ))}
+                </select>
+            </div>
+            <div className="search-box">
+                <label className="search-label" htmlFor="search-input">Search by Name: </label>
+                <input 
+                    className="form-control search-input" 
+                    type="text" 
+                    id="search-input" 
+                    value={searchTerm} 
+                    onChange={handleSearchTermChange} 
+                    placeholder="Enter product name" 
+                />
+            </div>
             <div className="row row-cols-1 row-cols-md-3">
-                {products.map(product => (
+                {filteredProducts.map(product => (
                     <div className="col mb-4" key={product.id}>
                         <div className="card product-card h-100">
                             <div className="product-image-container">

@@ -59,3 +59,31 @@
     background-color: #0056b3;
   }
   
+  .category-filter {
+    margin-bottom: 20px;
+  }
+  
+  .category-label {
+    font-weight: bold;
+  }
+  
+  .category-select {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .category-select option {
+    font-size: 14px;
+  }
+  
+  .category-select:hover {
+    border-color: #007bff;
+  }
+  
+  .category-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
