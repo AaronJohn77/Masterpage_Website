@@ -1,145 +1,73 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useState } from 'react';
+import './Product_page.css'; // Import the CSS file
 
+function ProductPage() {
+    const [products, setProducts] = useState([]);
+    const [quantities, setQuantities] = useState({});
 
-function Product_page() {
-    const randomNumber = Math.floor(Math.random() * 4);
-    const randomNumber2 = Math.floor(Math.random() * 2) // This will give you a number between 0 (inclusive) and 4 (exclusive)
-    const stockquantity =randomNumber;
-    const stockcheck = stockquantity;
-    const userinput = randomNumber2;
-    const productname = "Product 1"
-    const [quantity, setQuantity] = useState(1); 
-    const stockprice = 15;
-    const navigate = useNavigate();
-    function HandleAddCart(){
+    useEffect(() => {
+        axios.get('https://fakestoreapi.com/products')
+            .then(response => {
+                setProducts(response.data);
+                // Initialize quantities state with default values
+                const initialQuantities = {};
+                response.data.forEach(product => {
+                    initialQuantities[product.id] = 0;
+                });
+                setQuantities(initialQuantities);
+            })
+            .catch(error => {
+                console.error('Error fetching products:', error);
+            });
+    }, []);
 
-        if(stockcheck == userinput){
-            alert(" Sorry the product you selected is Out of Stock")
-            return
-        }else if(stockcheck < userinput){
-            alert(" Sorry the product you selected we only have "+stockquantity+" in stock")
-            return
-        }else
-        {
-        alert(productname+"Added to cart")
-        navigate("/CartPage")
-        }
-    }
+    const handleQuantityChange = (productId, quantity) => {
+        setQuantities(prevQuantities => ({
+            ...prevQuantities,
+            [productId]: quantity
+        }));
+    };
 
-  return (
-    <>
-        <div className="container mt-4">
+    const addToCart = (productId) => {
+        const quantity = quantities[productId];
+        console.log(`Adding ${quantity} of product ${productId} to cart`);
+        // Add your logic to add the product to the cart
+    };
+
+    return (
+        <div className="container product-container">
             <h1>Product Page</h1>
-            <div className="row">
-                {/* Add your product card structure here */}
-                <div className="col-md-4 mb-3">
-                        <div className="card">
-                            <img src="product-image.jpg" className="card-img-top" alt="Product" />
-                            <div className="card-body">
-                                <h5 className="card-title">Product 1</h5>
-                                <p className="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla faucibus magna vel gravida varius. Nulla facilisi.</p>
-                                <p className="card-text">RM {stockprice}</p>
-                                <div className="input-group mb-3">
-                                    <input type="number" className="form-control" placeholder="Quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-                                    <button className="btn btn-primary" onClick={HandleAddCart}>Add to Cart</button>
+            <div className="row row-cols-1 row-cols-md-3">
+                {products.map(product => (
+                    <div className="col mb-4" key={product.id}>
+                        <div className="card product-card h-100">
+                            <div className="product-image-container">
+                                <img src={product.image} className="card-img-top product-image" alt={product.title} />
+                            </div>
+                            <div className="card-body product-details">
+                                <h5 className="card-title product-title">{product.title}</h5>
+                                <p className="card-text product-description">{product.description}</p>
+                                <p className="card-text product-price">Price: ${product.price}</p>
+                            </div>
+                            <div className="card-footer d-flex justify-content-between align-items-center">
+                                <div className="input-group quantity-input">
+                                    <input 
+                                        type="number" 
+                                        className="form-control" 
+                                        placeholder="Quantity" 
+                                        value={quantities[product.id]} 
+                                        onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value))} 
+                                    />
                                 </div>
+                                <button className="btn btn-primary add-to-cart-btn" onClick={() => addToCart(product.id)}>Add to Cart</button>
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-4 mb-3">
-                        <div className="card">
-                            <img src="product-image.jpg" className="card-img-top" alt="Product" />
-                            <div className="card-body">
-                                <h5 className="card-title">Product 2</h5>
-                                <p className="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla faucibus magna vel gravida varius. Nulla facilisi.</p>
-                                <p className="card-text">RM {stockprice}</p>
-                                <div className="input-group mb-3">
-                                    <input type="number" className="form-control" placeholder="Quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-                                    <button className="btn btn-primary" onClick={HandleAddCart}>Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-4 mb-3">
-                        <div className="card">
-                            <img src="product-image.jpg" className="card-img-top" alt="Product" />
-                            <div className="card-body">
-                                <h5 className="card-title">Product 3</h5>
-                                <p className="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla faucibus magna vel gravida varius. Nulla facilisi.</p>
-                                <p className="card-text">RM {stockprice}</p>
-                                <div className="input-group mb-3">
-                                    <input type="number" className="form-control" placeholder="Quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-                                    <button className="btn btn-primary" onClick={HandleAddCart}>Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-4 mb-3">
-                        <div className="card">
-                            <img src="product-image.jpg" className="card-img-top" alt="Product" />
-                            <div className="card-body">
-                                <h5 className="card-title">Product 4</h5>
-                                <p className="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla faucibus magna vel gravida varius. Nulla facilisi.</p>
-                                <p className="card-text">RM {stockprice}</p>
-                                <div className="input-group mb-3">
-                                    <input type="number" className="form-control" placeholder="Quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-                                    <button className="btn btn-primary" onClick={HandleAddCart}>Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-4 mb-3">
-                        <div className="card">
-                            <img src="product-image.jpg" className="card-img-top" alt="Product" />
-                            <div className="card-body">
-                                <h5 className="card-title">Product 5</h5>
-                                <p className="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla faucibus magna vel gravida varius. Nulla facilisi.</p>
-                                <p className="card-text">RM {stockprice}</p>
-                                <div className="input-group mb-3">
-                                    <input type="number" className="form-control" placeholder="Quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-                                    <button className="btn btn-primary" onClick={HandleAddCart}>Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-4 mb-3">
-                        <div className="card">
-                            <img src="product-image.jpg" className="card-img-top" alt="Product" />
-                            <div className="card-body">
-                                <h5 className="card-title">Product 6</h5>
-                                <p className="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla faucibus magna vel gravida varius. Nulla facilisi.</p>
-                                <p className="card-text">RM {stockprice}</p>
-                                <div className="input-group mb-3">
-                                    <input type="number" className="form-control" placeholder="Quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-                                    <button className="btn btn-primary" onClick={HandleAddCart}>Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-4 mb-3">
-                        <div className="card">
-                            <img src="product-image.jpg" className="card-img-top" alt="Product" />
-                            <div className="card-body">
-                                <h5 className="card-title">Product 7</h5>
-                                <p className="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla faucibus magna vel gravida varius. Nulla facilisi.</p>
-                                <p className="card-text">RM {stockprice}</p>
-                                <div className="input-group mb-3">
-                                    <input type="number" className="form-control" placeholder="Quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-                                    <button className="btn btn-primary" onClick={HandleAddCart}>Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                {/* Repeat the above card structure for each product */}
+                ))}
             </div>
         </div>
-    </>
-  )
+    );
 }
 
-export default Product_page
+export default ProductPage;
