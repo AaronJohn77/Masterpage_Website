@@ -7,15 +7,12 @@ const bcrypt = require('bcrypt');
 const app = express()
 app.use(cors())
 
-const mongodb_name = "FSD_Hackathon"
-const mongoDB_localhost = "mongodb://localhost:27017/"
-const mongoDB_url = mongoDB_localhost + mongodb_name
-
-
+const mongoDB_url = "mongodb+srv://admin:admin123@clusterecommerce.hp9v9r2.mongodb.net/"; // Update this with your new MongoDB connection string
 
 app.use(express.json())
-mongoose.connect(mongoDB_url)
-
+mongoose.connect(mongoDB_url, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log("MongoDB connected"))
+    .catch(err => console.error("MongoDB connection error:", err));
 
 app.get('/', (req, res) => {
     UserModel.find({}) //to find the user in database
@@ -50,7 +47,7 @@ app.post("/login", async (req, res) => {
       console.error(error);
       res.status(500).json({ message: "Internal server error" });
     }
-  });
+});
 
 app.get('/getUser/:id', (req, res) => {
     const id = req.params.id //extract the parameters from request url
@@ -75,7 +72,7 @@ app.put('/updateUser/:id', (req, res) => {
 app.delete('/deleteUser/:id', (req, res) => {
     const id = req.params.id;
     UserModel.findByIdAndDelete({ _id:id })
-        .then(res => res.json(res))
+        .then(result => res.json(result))
         .catch(err => res.json(err))
 })
 
@@ -85,8 +82,6 @@ app.post('/createUser', (req, res) => {
         .catch(err => res.json(err))
 
 })
-
-
 
 app.listen(3001, () => {
     console.log("server is running")
